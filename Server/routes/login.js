@@ -4,7 +4,6 @@ const { User } = require("../models/registerModels");
 const bcrypt = require("bcrypt");
 const Joi = require("joi");
 
-
 router.post("/login", async (req, res) => {
   try {
     let { error } = validate(req.body);
@@ -25,7 +24,15 @@ router.post("/login", async (req, res) => {
 
     const token = user.generateAuthToken();
 
-    res.status(200).send({ message: "logged in successfully", token });
+    res.status(200).send({
+      message: "logged in successfully",
+      user: {
+        firstname: user.firstname,
+        lastname: user.lastname,
+        email: user.email,
+      },
+      token,
+    });
   } catch (error) {
     res.status(500).send({ message: "Internal Server Error" });
   }

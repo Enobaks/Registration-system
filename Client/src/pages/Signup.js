@@ -1,7 +1,4 @@
-import React, { useState, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import userReducer from "../redux/user/userReducer";
-import { register } from "../redux/user/UserAction";
+import React, { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Link, useNavigate } from "react-router-dom";
@@ -17,8 +14,8 @@ const Signup = () => {
   };
   const [formValues, setFormValues] = useState(initialValues);
   const [formErrors, setFormErrors] = useState({});
-  const dispatch = useDispatch();
-  const registeredUser = useSelector((store) => store.isRegistered);
+  // const dispatch = useDispatch();
+  // const registeredUser = useSelector((store) => store.isRegistered);
   let navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -33,7 +30,6 @@ const Signup = () => {
     setFormErrors({ ...Check });
 
     if (Object.keys(Check).length === 0) {
-      console.log(formErrors);
       axios
         .post("http://localhost:4000/api/register", { 
         firstname: formValues.firstname,
@@ -46,8 +42,8 @@ const Signup = () => {
         .catch((err) => {
           if (err) toast.error(err.response.data);
         });
-      // dispatch(register(formValues));
-      setTimeout(() => navigate("/login"), 5000);
+      
+      setTimeout(() => navigate("/login"), 6000);
     }
     console.log("Errors", formErrors);
     console.log("Values", formValues);
@@ -60,16 +56,6 @@ const Signup = () => {
     });
   };
 
-  // const notify = () => {
-  //   console.log("idfgd", registeredUser);
-  //   registeredUser
-  //     ? toast.success("Registration Successful!")
-  //     : toast.error("Registration Failed!");
-  // };
-  // useEffect(() => {
-  //   console.log(registeredUser);
-  //   registeredUser && toast.success("Registration Successful!");
-  // }, [registeredUser]);
 
   const validate = (values) => {
     const errors = {};

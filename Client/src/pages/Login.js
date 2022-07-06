@@ -1,7 +1,9 @@
-import axios from "axios";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { ToastContainer, toast } from "react-toastify";
+// import { getUserDetails } from "../redux/user/action";
+import UserDispatch from "../redux/user/action";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
   const [loginDetails, setLoginDetails] = useState({
@@ -9,6 +11,8 @@ const Login = () => {
     password: "",
   });
   const [loginErrors, setLoginErrors] = useState({});
+  let dispatch = useDispatch();
+  let navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -35,26 +39,28 @@ const Login = () => {
     console.log(check);
     setLoginErrors({ ...check });
     if (Object.keys(check).length === 0) {
-      axios
-        .post("http://localhost:4000/api/login", {
+      // dispatch(
+      //   getUserDetails({
+      //     email: loginDetails.email,
+      //     password: loginDetails.password,
+      //   })
+      // );
+      dispatch(
+        UserDispatch.getUser({
           email: loginDetails.email,
           password: loginDetails.password,
         })
-        .then((res) => {
-          toast.success(res.data.message);
-        })
-        .catch((err) => {
-          toast.error(err.response.data.message);
-        });
+      );
       setLoginDetails({
         email: "",
         password: "",
       });
     }
+    setTimeout(() => navigate("/profile"), 3000);
   };
 
   return (
-    <div className="login-wrap container w-25 mt-5">
+    <div className="login-wrap container w-50 mt-5">
       <form onSubmit={handleSubmit}>
         <h1>Login</h1>
         <div className="mb-3">
@@ -93,7 +99,7 @@ const Login = () => {
         </div>
         <p className="d-flex justify-content-end small petit">
           Don't have an account?
-          <Link to="/register" className="text-decoration-none petit">
+          <Link to="/register" className="text-decoration-none petit ms-1">
             Register here
           </Link>
         </p>
@@ -101,7 +107,6 @@ const Login = () => {
           Submit
         </button>
       </form>
-      <ToastContainer />
     </div>
   );
 };

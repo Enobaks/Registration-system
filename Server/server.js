@@ -6,7 +6,7 @@ const register = require("./routes/register");
 const login = require("./routes/login");
 const profile = require("./routes/profile");
 require("dotenv").config();
-require('./prod')(app)
+require("./prod")(app);
 
 app.use(express.json());
 app.use(cors());
